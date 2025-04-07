@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faded Market Admin - Inventory Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f3c84d',
+                        dark: '#121212',
+                        darker: '#0a0a0a'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+        }
+        .admin-input {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+        }
+        .admin-input:focus {
+            border-color: #f3c84d;
+            outline: none;
+        }
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="font-sans bg-dark">
+    <!-- Admin Header -->
+    <header class="bg-darker shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <nav class="flex items-center justify-between">
+                <div class="flex items-center space-x-8">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/widecanvas-d0dd4.appspot.com/o/logos%2FFaded%20Market%20logo.jpeg?alt=media&token=d6a12c4f-8785-4eb3-8610-f805d45b4ba8" 
+                         alt="Faded Market Logo" 
+                         class="h-12 w-auto">
+                    <span class="text-white text-xl font-semibold">Admin Panel</span>
+                </div>
+                <button id="logoutBtn" class="text-white hover:text-primary transition-colors">
+                    <i class="bi bi-box-arrow-right text-xl"></i> Logout
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Admin Dashboard -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Product Management Form -->
+            <div class="md:col-span-2">
+                <div class="bg-darker p-6 rounded-lg border border-gray-700">
+                    <h2 class="text-2xl font-bold mb-6 text-white">Add/Edit Product</h2>
+                    <form id="productForm" class="space-y-4">
+                        <div>
+                            <label class="block text-white mb-2">Product Name</label>
+                            <input type="text" id="productName" class="w-full px-4 py-2 rounded admin-input" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white mb-2">Product Image</label>
+                            <div class="flex flex-col space-y-4">
+                                <input type="file" 
+                                       id="productImage" 
+                                       accept="image/*"
+                                       class="w-full px-4 py-2 rounded admin-input" 
+                                       required
+                                       onchange="previewImage(event)">
+                                <img id="imagePreview" class="image-preview hidden" alt="Preview">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white mb-2">Original Price (₹)</label>
+                                <input type="number" id="originalPrice" class="w-full px-4 py-2 rounded admin-input" required>
+                            </div>
+                            <div>
+                                <label class="block text-white mb-2">Discounted Price (₹)</label>
+                                <input type="number" id="discountedPrice" class="w-full px-4 py-2 rounded admin-input" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-white mb-2">Category</label>
+                            <select id="category" class="w-full px-4 py-2 rounded admin-input" required>
+                                <option value="electronics">Electronics</option>
+                                <option value="fashion">Fashion</option>
+                                <option value="home">Home & Living</option>
+                                <option value="gadgets">Gadgets</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-white mb-2">Description</label>
+                            <textarea id="description" rows="3" class="w-full px-4 py-2 rounded admin-input" required></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-primary text-dark py-3 rounded-lg hover:bg-primary/90 transition font-semibold">
+                            Add Product
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Stats and Quick Actions -->
+            <div>
+                <div class="bg-darker p-6 rounded-lg border border-gray-700 mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-white">Dashboard Overview</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-dark rounded-lg">
+                            <div>
+                                <p class="text-gray-400">Total Products</p>
+                                <p class="text-2xl font-bold text-white">247</p>
+                            </div>
+                            <i class="bi bi-box text-primary text-3xl"></i>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-dark rounded-lg">
+                            <div>
+                                <p class="text-gray-400">Active Discounts</p>
+                                <p class="text-2xl font-bold text-white">12</p>
+                            </div>
+                            <i class="bi bi-tag text-primary text-3xl"></i>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-dark rounded-lg">
+                            <div>
+                                <p class="text-gray-400">Low Stock Items</p>
+                                <p class="text-2xl font-bold text-white">8</p>
+                            </div>
+                            <i class="bi bi-exclamation-circle text-primary text-3xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-darker p-6 rounded-lg border border-gray-700">
+                    <h3 class="text-xl font-semibold mb-4 text-white">Quick Actions</h3>
+                    <div class="space-y-3">
+                        <button class="w-full bg-dark hover:bg-dark/80 text-white py-2 px-4 rounded-lg flex items-center justify-between">
+                            <span>Export Products</span>
+                            <i class="bi bi-download"></i>
+                        </button>
+                        <button class="w-full bg-dark hover:bg-dark/80 text-white py-2 px-4 rounded-lg flex items-center justify-between">
+                            <span>Bulk Update</span>
+                            <i class="bi bi-arrow-repeat"></i>
+                        </button>
+                        <button class="w-full bg-dark hover:bg-dark/80 text-white py-2 px-4 rounded-lg flex items-center justify-between">
+                            <span>Generate Report</span>
+                            <i class="bi bi-file-earmark-text"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                const preview = document.getElementById('imagePreview');
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const productData = {
+                name: document.getElementById('productName').value,
+                image: document.getElementById('productImage').files[0],
+                originalPrice: document.getElementById('originalPrice').value,
+                discountedPrice: document.getElementById('discountedPrice').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value
+            };
+
+            const formData = new FormData();
+            for (const key in productData) {
+                formData.append(key, productData[key]);
+            }
+
+            console.log('Product Data:', productData);
+            alert('Product added successfully!');
+            document.getElementById('imagePreview').classList.add('hidden');
+            this.reset();
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if(confirm('Are you sure you want to logout?')) {
+                window.location.href = '/login';
+            }
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
